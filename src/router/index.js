@@ -7,11 +7,11 @@ const routes = [
     component: () => import('../views/FontView.vue'),
     children: [
       {
-        path: 'products',
+        path: '/products',
         component: () => import('../views/ProductsView.vue')
       },
       {
-        path: 'product',
+        path: 'product/:id',
         component: () => import('../views/ProductView.vue')
       }
     ]

@@ -26,7 +26,7 @@
         </td>
         <td>
           <div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-outline-dark">查看更多</button>
+            <router-link :to="`/product/${product.id}`" class="btn btn-outline-dark">查看更多</router-link>
             <button type="button" class="btn btn-danger">加入購物車</button>
           </div>
         </td>
@@ -43,7 +43,8 @@ export default {
     }
   },
   methods: {
-    getProduct () {
+    // 取得 產品列表
+    getProducts () {
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/products`
       this.$http
         .get(url)
@@ -57,7 +58,7 @@ export default {
     }
   },
   mounted () {
-    this.getProduct()
+    this.getProducts()
   }
 }
 </script>
