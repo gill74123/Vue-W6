@@ -13,13 +13,15 @@
         <p v-else>$ {{ product.price}} / {{ product.unit}}</p>
         <div class="input-group">
           <input type="number" class="form-control" min="1">
-          <button type="button" class="btn btn-primary">加入購物車</button>
+          <button type="button" class="btn btn-primary" @click="addCart">加入購物車</button>
         </div>
       </div>
   </div>
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
+
 export default {
   data () {
     return {
@@ -30,12 +32,16 @@ export default {
   methods: {
     getProduct () {
       const { id } = this.$route.params
+      this.productId = id
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/product/${id}`
       this.$http.get(url)
         .then((res) => {
           console.log(res)
           this.product = res.data.product
         })
+    },
+    addCart () {
+      emitter.emit('add-cart', this.productId)
     }
   },
   mounted () {

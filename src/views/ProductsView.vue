@@ -27,7 +27,7 @@
         <td>
           <div class="btn-group btn-group-sm">
             <router-link :to="`/product/${product.id}`" class="btn btn-outline-dark">查看更多</router-link>
-            <button type="button" class="btn btn-danger">加入購物車</button>
+            <button type="button" class="btn btn-danger" @click="addCart(product.id)">加入購物車</button>
           </div>
         </td>
       </tr>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
+
 export default {
   data () {
     return {
@@ -55,10 +57,29 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    // 加入購物車
+    addCart (id, qty = 1) {
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart`
+      const data = {
+        product_id: id,
+        qty: qty
+      }
+      this.$http.post(url, { data })
+        .then((res) => {
+          console.log(res)
+          // this.products = res.data.products
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   mounted () {
     this.getProducts()
+    emitter.on('add-cart', (id) => {
+      this.addCart(id)
+    })
   }
 }
 </script>
