@@ -30,6 +30,11 @@ const routes = [
         component: () => import('../views/AdminProductsView.vue')
       }
     ]
+  },
+  // 登入頁面
+  {
+    path: '/login',
+    component: () => import('../views/LoginView.vue')
   }
 ]
 

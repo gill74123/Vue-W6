@@ -1,5 +1,6 @@
 <template>
   <h2>這是產品列表</h2>
+  <Loading :active="isLoading"></Loading>
   <table class="table">
     <thead>
       <tr>
@@ -26,8 +27,13 @@
         </td>
         <td>
           <div class="btn-group btn-group-sm">
-            <router-link :to="`/product/${product.id}`" class="btn btn-outline-dark">查看更多</router-link>
-            <button type="button" class="btn btn-danger" @click="addCart(product.id)">加入購物車</button>
+            <button type="button" class="btn btn-outline-dark" @click="seeMoreInfo(product.id)">查看更多</button>
+            <button type="button" class="btn btn-danger" @click="addCart(product.id)">
+              <div class="spinner-border spinner-border-sm" v-if="product.id === spinnerOn" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              加入購物車
+            </button>
           </div>
         </td>
       </tr>
@@ -41,18 +47,23 @@ import emitter from '@/libs/emitter'
 export default {
   data () {
     return {
-      products: []
+      products: [],
+      isLoading: false,
+      spinnerOn: ''
     }
   },
   methods: {
     // 取得 產品列表
     getProducts () {
+      this.isLoading = true
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/products`
       this.$http
         .get(url)
         .then((res) => {
           // console.log(res)
           this.products = res.data.products
+
+          this.isLoading = false
         })
         .catch((err) => {
           console.log(err)
@@ -60,6 +71,8 @@ export default {
     },
     // 加入購物車
     addCart (id, qty = 1) {
+      console.log('進入方法')
+      this.spinnerOn = id
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart`
       const data = {
         product_id: id,
@@ -68,11 +81,15 @@ export default {
       this.$http.post(url, { data })
         .then((res) => {
           console.log(res)
-          // this.products = res.data.products
+          this.spinnerOn = ''
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    // 查看更多
+    seeMoreInfo (id) {
+      this.$router.push(`/product/${id}`)
     }
   },
   mounted () {
@@ -80,6 +97,11 @@ export default {
     emitter.on('add-cart', (id) => {
       this.addCart(id)
     })
+    console.log('裝載')
+  },
+  unmounted () {
+    console.log('卸載')
+    emitter.off('add-cart')
   }
 }
 </script>

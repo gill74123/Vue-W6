@@ -1,5 +1,6 @@
 <template>
   <h2>這是單一產品列表</h2>
+  <Loading :active="isLoading"></Loading>
   <div class="row">
       <div class="col-6">
         <img :src="product.imageUrl" height="300"  alt="">
@@ -26,7 +27,8 @@ export default {
   data () {
     return {
       product: {},
-      productId: ''
+      productId: '',
+      isLoading: false
     }
   },
   methods: {
@@ -36,16 +38,22 @@ export default {
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/product/${id}`
       this.$http.get(url)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           this.product = res.data.product
+
+          this.isLoading = false
         })
     },
     addCart () {
+      console.log('點擊單品的加入購物車')
       emitter.emit('add-cart', this.productId)
     }
   },
   mounted () {
     this.getProduct()
+    this.isLoading = true
+
+    console.log(this)
   }
 }
 </script>
