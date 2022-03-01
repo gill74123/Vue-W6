@@ -13,22 +13,30 @@
         </div>
         <p v-else>$ {{ product.price}} / {{ product.unit}}</p>
         <div class="input-group">
-          <input type="number" class="form-control" min="1">
-          <button type="button" class="btn btn-primary" @click="addCart">加入購物車</button>
+          <!-- <input type="number" class="form-control" min="1"> -->
+          <select name="" id="" class="form-select" v-model="productQty" :disabled="spinnerOn">
+            <option v-for="num in 30" :key="num" :value="num">{{ num }}</option>
+          </select>
+          <button type="button" class="btn btn-primary" @click="addCart(product.id, productQty)">
+            <div class="spinner-border spinner-border-sm" v-if="spinnerOn" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            加入購物車
+          </button>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import emitter from '@/libs/emitter'
-
 export default {
   data () {
     return {
       product: {},
       productId: '',
-      isLoading: false
+      isLoading: false,
+      productQty: 1,
+      spinnerOn: false
     }
   },
   methods: {
@@ -44,9 +52,21 @@ export default {
           this.isLoading = false
         })
     },
-    addCart () {
-      console.log('點擊單品的加入購物車')
-      emitter.emit('add-cart', this.productId)
+    addCart (id, qty = 1) {
+      this.spinnerOn = true
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart`
+      const data = {
+        product_id: id,
+        qty: qty
+      }
+      this.$http.post(url, { data })
+        .then((res) => {
+          // console.log(res)
+          this.spinnerOn = false
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   mounted () {

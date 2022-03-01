@@ -6,7 +6,7 @@
           <div class="col-md-10">
             <div class="text-end mb-2">
               <button type="button" class="btn btn-outline-danger" :disabled="cart.carts.length === 0" @click="deleteCarts">
-                <div class="spinner-border spinner-border-sm" v-if="spinnerOn" role="status">
+                <div class="spinner-border spinner-border-sm" v-if="spinnerOn === true" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
                 清空購物車
@@ -35,7 +35,11 @@
                           </td>
                           <td><img :src="cart.product.imageUrl" height="100" alt=""></td>
                           <td>{{ cart.product.title }}</td>
-                          <td>{{ cart.qty }}</td>
+                          <td>
+                            <select name="" id="" class="form-select" v-model="cart.qty" @change="updateCartItem(cart)" :disabled="cart.product_id === spinnerOn">
+                              <option v-for="num in 30" :key="num" :value="num">{{ num }}</option>
+                            </select>
+                          </td>
                           <td>{{ cart.product.price }}</td>
                       </tr>
                     </template>
@@ -144,7 +148,7 @@ export default {
     },
     // 刪除購物車單一品項
     deleteItemCart (id) {
-      this.spinnerOn = id
+      this.spinnerOn = id // 使用使用購物車 id
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart/${id}`
       this.$http
         .delete(url)
@@ -158,9 +162,26 @@ export default {
           console.log(err)
         })
     },
+    // 修改購物車數量
+    updateCartItem (item) {
+      this.spinnerOn = item.product_id // 使用使用產品 id
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`
+      const data = {
+        product_id: item.product_id,
+        qty: item.qty
+      }
+      this.$http.put(url, { data })
+        .then((res) => {
+          // console.log(res)
+          this.spinnerOn = false
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     // 建立訂單
     addOrder () {
-      console.log(this.formData)
+      console.log('1')
     }
   },
   mounted () {

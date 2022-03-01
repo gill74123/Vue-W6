@@ -71,7 +71,6 @@ export default {
     },
     // 加入購物車
     addCart (id, qty = 1) {
-      console.log('進入方法')
       this.spinnerOn = id
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart`
       const data = {
@@ -97,11 +96,6 @@ export default {
     emitter.on('add-cart', (id) => {
       this.addCart(id)
     })
-    console.log('裝載')
-  },
-  unmounted () {
-    console.log('卸載')
-    emitter.off('add-cart')
   }
 }
 </script>
