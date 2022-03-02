@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d2077f5"],{a17f:function(e,n,t){"use strict";t.r(n);var c=t("7a23"),o={class:"container text-center"},r=Object(c["createElementVNode"])("h2",null,"產品列表",-1),a=[r];function d(e,n){return Object(c["openBlock"])(),Object(c["createElementBlock"])("div",o,a)}var l=t("6b0d"),s=t.n(l);const u={},i=s()(u,[["render",d]]);n["default"]=i}}]);
+//# sourceMappingURL=chunk-2d2077f5.4cd743b0.js.map
