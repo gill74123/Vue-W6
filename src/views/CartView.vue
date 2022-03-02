@@ -143,6 +143,8 @@ export default {
           this.getCart()
 
           this.spinnerOn = false
+
+          emitter.emit('get-cart')
         })
         .catch((err) => {
           console.log(err)
@@ -159,6 +161,8 @@ export default {
           this.getCart()
 
           this.spinnerOn = false
+
+          emitter.emit('get-cart')
         })
         .catch((err) => {
           console.log(err)
@@ -176,6 +180,8 @@ export default {
         .then((res) => {
           // console.log(res)
           this.spinnerOn = false
+
+          this.getCart()
 
           emitter.emit('get-cart')
         })
