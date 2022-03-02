@@ -81,6 +81,8 @@ export default {
         .then((res) => {
           console.log(res)
           this.spinnerOn = ''
+
+          emitter.emit('get-cart')
         })
         .catch((err) => {
           console.log(err)
@@ -93,9 +95,6 @@ export default {
   },
   mounted () {
     this.getProducts()
-    emitter.on('add-cart', (id) => {
-      this.addCart(id)
-    })
   }
 }
 </script>

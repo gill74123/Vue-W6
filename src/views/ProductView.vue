@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
+
 export default {
   data () {
     return {
@@ -63,6 +65,8 @@ export default {
         .then((res) => {
           // console.log(res)
           this.spinnerOn = false
+
+          emitter.emit('get-cart')
         })
         .catch((err) => {
           console.log(err)

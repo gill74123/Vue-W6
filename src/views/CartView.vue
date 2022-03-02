@@ -61,7 +61,7 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <h2>資料表單</h2>
-          <Form class="text-start" v-slot="{ errors }" @submit.prevent="addOrder">
+          <Form ref="resetForm" class="text-start" v-slot="{ errors }" @submit="addOrder">
             <div class="mb-3">
               <label for="Email1" class="form-label">Email</label>
               <Field type="email" class="form-control" :class="{ 'is-invalid': errors['Email'] }" id="Email1" name="Email" aria-describedby="emailHelp" placeholder="請輸入 Email"
@@ -101,6 +101,8 @@
 </template>
 
 <script>
+import emitter from '@/libs/emitter'
+
 export default {
   data () {
     return {
@@ -174,6 +176,8 @@ export default {
         .then((res) => {
           // console.log(res)
           this.spinnerOn = false
+
+          emitter.emit('get-cart')
         })
         .catch((err) => {
           console.log(err)
@@ -181,7 +185,20 @@ export default {
     },
     // 建立訂單
     addOrder () {
-      console.log('1')
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/order`
+      const data = this.formData
+      this.$http.post(url, { data })
+        .then((res) => {
+          // console.log(res)
+
+          this.getCart()
+          this.$refs.resetForm.resetForm()
+
+          emitter.emit('get-cart')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   mounted () {

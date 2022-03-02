@@ -1,4 +1,7 @@
 import { createApp } from 'vue'
+// Bootstrap
+import 'bootstrap'
+
 // axios / VueAxios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
